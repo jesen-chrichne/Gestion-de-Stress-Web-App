@@ -1,0 +1,314 @@
+{% extends 'app.html' %}
+{% load static %}
+    {% block stylesheet %}
+    <!--Bootstrap CSS-->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <!--Custom style.css-->
+    <link rel="stylesheet" href="{% static 'css/quicksand.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <!--Font Awesome-->
+    <link rel="stylesheet" href="{% static 'css/fontawesome-all.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/fontawesome.css' %}">
+    <!--Animate CSS-->
+    <link rel="stylesheet" href="{% static 'css/animate.min.css' %}">
+    <!--Chartist CSS-->
+    <link rel="stylesheet" href="{% static 'css/chartist.min.css' %}">
+    <!--Map-->
+    <link rel="stylesheet" href="{% static 'css/jquery-jvectormap-2.0.2.css' %}">
+    <!--Bootstrap Calendar-->
+    <link rel="stylesheet" href="{% static 'js/calendar/bootstrap_calendar.css' %}">
+    <!--Nice select -->
+    <link rel="stylesheet" href="{% static 'css/nice-select.css' %}">
+    <style>
+        #anyClass {
+            height:750px;
+            overflow-y: scroll;
+          } 
+    </style>
+    {% endblock stylesheet %}
+
+    {% block title %}Journal{% endblock title %}
+
+    {% block content %}
+
+    <div class="row main-content">
+        <!--Sidebar left-->
+        <div class="col-sm-3 col-xs-6 sidebar pl-0">
+            <div class="inner-sidebar mr-3">
+                <!--Image Avatar-->
+                <div class="avatar text-center">
+                    <img src="{{ usr.Image_profil.url }}" alt="" class="rounded-circle" />
+                    <p><strong>{{ usr.Nom_Complet }}</strong></p>
+                    <span class="text-primary small"><strong>{{ usr.Status }}</strong></span>
+                </div>
+                <!--Image Avatar-->
+
+                <!--Sidebar Navigation Menu-->
+                <div class="sidebar-menu-container">
+                    <ul class="sidebar-menu mt-4 mb-4">
+                        <li class="parent">
+                            <a href="/index_app" class=""><i class="fa fa-rocket mr-3"> </i>
+                                <span class="none">Acceuil</span>
+                            </a>  
+                        </li>
+                        <li class="parent">
+                            <a href="/profil" class=""><i class="fas fa-user mr-3"> </i>
+                                <span class="none">Mon profil</span>
+                            </a>  
+                        </li>
+                        <li class="parent">
+                            <a href="/journal_app" class=""><i class="fas fa-book mr-3"> </i>
+                                <span class="none">Journal</span>
+                            </a>  
+                        </li>
+                        <li class="parent">
+                            <a href="/manage_stress_app" class=""><i class="fas fa-smile mr-3"></i>
+                                <span class="none">Gestion de stress</span>
+                            </a>
+                        </li>
+                        <li class="parent">
+                            <a href="/ressource_app" class=""><i class="fas fa-database mr-3"></i>
+                                <span class="none">Ressource</span>
+                            </a>
+                        </li>
+                        {% if usr.Status == 'Psychologue' %}
+                        <li class="parent">
+                            <a href="/assistance" class=""><i class="fas fa-envelope mr-3"></i>
+                                <span class="none">Messagerie</span>
+                            </a>
+                        </li>
+                        {% else %}
+                        <li class="parent">
+                            <a href="/chat" class=""><i class="fas fa-comments mr-3"></i>
+                                <span class="none">Chat</span>
+                            </a>
+                        </li>
+                        {% endif %}
+
+                        <li class="parent">
+                            <a href="/logout" class=""><i class="fas fa-power-off mr-3"></i>
+                                <span class="none">Déconnexion</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <!--Sidebar Naigation Menu-->
+            </div>
+        </div>
+
+        <div class="col-sm-9 col-xs-12 content pt-3 pl-0" id="anyClass">
+            <button class="btn btn-success" data-toggle="modal" data-target="#myModal">
+                <i class="fas fa-plus mr-3"></i> Poster publication
+            </button>
+            <div class="row mt-3">
+                <div class="col-sm-12">
+                    <div class="mt-1 mb-3 p-3 button-container border bg-white shadow-sm custom-tabs">
+                        <nav>
+                            <div class="nav nav-tabs nav-fill" id="nav-customContent" role="tablist">
+                                <a class="nav-item nav-link active" id="nav-pub" data-toggle="tab" href="#custom-pub" role="tab" aria-controls="nav-pub" aria-selected="true">Publication</a>
+                                <a class="nav-item nav-link" id="nav-new" data-toggle="tab" href="#custom-new" role="tab" aria-controls="nav-new" aria-selected="false">News</a>
+                            </div>
+                        </nav>
+                        <div class="tab-content py-3 px-3 px-sm-0" id="nav-customContent">
+                            <div class="tab-pane fade show active" id="custom-pub" role="tabpanel" aria-labelledby="nav-pub">
+                                {% for post in pst %}
+                                <!--Single feed-->
+                                <div class="feed-single mb-3">
+                                    <div class="media">
+                                        <img class="mr-3 rounded-circle" height="40px" width="40px" src="{{ post.Auteur_pub.Image_profil.url }}">
+                                        <div class="media-body">
+                                            <h6 class="mt-1">{{ post.Auteur_pub.Nom_Complet }}
+                                                <small class="text-muted pl-2"><i class="fa fa-clock"></i>&nbsp; {{ post.Date_pub }}</small>
+                                                <small class="text-muted small pull-right"><i>{{ post.Auteur_pub.Fonction }}</i> <i class="fa fa-bookmark-o pl-2"></i></small>
+                                                <br>
+                                            </h6>
+                                            <div>                                    
+                                                {% if post.Fichier %}
+                                                <img class="card-img-top" src="{{ post.Fichier.url }}">
+                                                {% else %}
+                                                {% endif %}
+                                            </div>
+                                            <h5 class="mt-1">{{ post.Titre }}</h5>
+                                            <p>{{ post.Contenu }}</p>
+
+                                            <div class="feed-footer">
+                                                <form action="/like_post/{{ post.id }}" method="post">
+                                                    {% csrf_token %}
+                                                    
+                                                        {% if post.Like.Nom_Complet == usr.Nom_Complet %}
+                                                            <button type="submit" name="blogpost-{{ post.id }}" value="{{ post.id }}" class="btn btn-round btn-danger">
+                                                                <span class="pr-3"><i class="fas fa-heart"></i>   {{ post.Like.count }}</span>
+                                                            </button>
+                                                        {% else %}
+                                                            <button type="submit" name="blogpost-{{ post.id }}" value="{{ post.id }}" class="btn btn-round btn-default">
+                                                                <span class="pr-3"><i class="fas fa-heart"></i>   {{ post.Like.count }}</span>
+                                                            </button>
+                                                        {% endif %}
+
+                                                    <span class="pr-3">
+                                                        <a href="/details_pub/{{ post.id }}"><i class="fa fa-comment"></i> Voir Commentaires</a>
+                                                    </span>
+                                                    <span class="pl-3 pull-right"><i class="fa fa-ellipsis-h"></i></span>
+
+                                                    <p class="clearfix"></p>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--/Single feed-->
+
+                                <div class="dropdown-divider"></div>
+                                {% endfor %}
+                            </div>
+
+                                {% comment %} {% for post in pst %}
+                                <div class="card">
+                                    {% if post.Fichier %}
+                                    <img class="card-img-top" src="{{ post.Fichier.url }}">
+                                    {% else %}
+                                    {% endif %}
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ post.Titre }}</h5>
+                                        <p class="card-text">{{ post.Contenu }}</p>
+                                        <p class="card-text"><small class="text-muted">{{ post.Date_pub }}</small></p>
+                                        <div class="row text-center">
+                                            <div class="col-sm-4">
+                                                <i class="fas fa-heart"></i>
+                                                <span class="None"> Réagir</span>
+
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <a href="/details_pub/{{ post.id }}">
+                                                    <i class="fas fa-comment"></i>
+                                                    <span class="None"> Voir Commentaires</span>
+                                                </a>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <a href="#">
+                                                    <i class="fas fa-comments"></i>
+                                                    <span class="None"> Message privé</span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+                                {% endfor %}
+                            </div> {% endcomment %}
+                            <div class="tab-pane fade" id="custom-new" role="tabpanel" aria-labelledby="nav-new">
+                                {% for new in nws %}
+                                <div class="card">
+                                    {% if new.Fichier %}
+                                    <img class="card-img-top" src="{{ new.Fichier.url }}">
+                                    {% else %}
+                                    {% endif %}
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ new.Titre }}</h5>
+                                        <p class="card-text">{{ new.Contenu }}</p>
+                                        <p class="card-text"><small class="text-muted">{{ new.Date_pub }}</small></p>
+                                        <div class="row text-center">
+                                            <div class="col-sm-12 btn btn-default">
+                                                <i class="fas fa-heart"></i>
+                                                <span class="None"> {{ new.Like.count }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div><br>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="myModal">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+          
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h3>Publication</h3>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+          
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                        <form class="form-horizontal mt-4 mb-5" method="post" action="{% url 'pub_post_user' %}" enctype="multipart/form-data">
+                            {%  csrf_token %}
+                            <div class="form-group row">
+                                <label for="Titre" class="control-label col-sm-2">Titre</label>
+                                <div class="col-sm-10">
+                                    <input type="text" name="Titre" class="form-control" placeholder="Titre"/>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="Contenu" class="control-label col-sm-2">Contenu</label>
+                                <div class="col-sm-10">
+                                    <textarea name="Contenu" class="form-control" placeholder="Contenu"></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="Fichier" class="control-label col-sm-2">Fichier</label>
+                                <div class="col-sm-10">
+                                    <input type="file" name="Fichier" class="form-control"/>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="offset-sm-2 col-sm-9">
+                                    <input type="submit" class="btn btn-success" value="Publier">
+                                    <a class="btn btn-danger" href="/journal_app">Annuler</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+    {% endblock content %}
+
+    {% block script %}
+    <!-- Page JavaScript Files-->
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/jquery-1.12.4.min.js' %}"></script>
+    <!--Popper JS-->
+    <script src="{% static 'js/popper.min.js' %}"></script>
+    <!--Bootstrap-->
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <!--Sweet alert JS-->
+    <script src="{% static 'js/sweetalert.js' %}"></script>
+    <!--Progressbar JS-->
+    <script src="{% static 'js/progressbar.min.js' %}"></script>
+    <!--Flot.JS-->
+    <script src="{% static 'js/charts/jquery.flot.min.js' %}"></script>
+    <script src="{% static 'js/charts/jquery.flot.pie.min.js' %}"></script>
+    <script src="{% static 'js/charts/jquery.flot.categories.min.js' %}"></script>
+    <script src="{% static 'js/charts/jquery.flot.stack.min.js' %}"></script>
+    <!--Chart JS-->
+    <script src="{% static 'js/charts/chart.min.js' %}"></script>
+    <!--Chartist JS-->
+    <script src="{% static 'js/charts/chartist.min.js' %}"></script>
+    <script src="{% static 'js/charts/chartist-data.js' %}"></script>
+    <script src="{% static 'js/charts/demo.js' %}"></script>
+    <!--Maps-->
+    <script src="{% static 'js/maps/jquery-jvectormap-2.0.2.min.js' %}"></script>
+    <script src="{% static 'js/maps/jquery-jvectormap-world-mill-en.js' %}"></script>
+    <script src="{% static 'js/maps/jvector-maps.js' %}"></script>
+    <!--Bootstrap Calendar JS-->
+    <script src="{% static 'js/calendar/bootstrap_calendar.js' %}"></script>
+    <script src="{% static 'js/calendar/demo.js' %}"></script>
+    <!--Nice select-->
+    <script src="{% static 'js/jquery.nice-select.min.js' %}"></script>
+
+    <!--Custom Js Script-->
+    <script src="{% static 'js/custom.js' %}"></script>
+    <!--Custom Js Script-->
+    <script>
+        //Nice select
+        $('.bulk-actions').niceSelect();
+    </script>
+    {% endblock script %}

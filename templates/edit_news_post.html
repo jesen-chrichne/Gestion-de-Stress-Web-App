@@ -1,0 +1,170 @@
+{% extends 'base.html' %}
+{% load static %}
+
+    {% block stylesheet %}
+    <!--Bootstrap CSS-->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <!--Custom style.css-->
+    <link rel="stylesheet" href="{% static 'css/quicksand.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <!--Font Awesome-->
+    <link rel="stylesheet" href="{% static 'css/fontawesome-all.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/fontawesome.css' %}">
+    <!--Chartist CSS-->
+    <link rel="stylesheet" href="{% static 'css/chartist.min.css' %}">
+    <!--Bootstrap Calendar-->
+    <link rel="stylesheet" href="{% static 'js/calendar/bootstrap_calendar.css' %}">
+    <!--Datatable-->
+    <link rel="stylesheet" href="{% static 'css/dataTables.bootstrap4.min.css' %}">
+    {% endblock stylesheet %}
+
+    {% block title %}Postes et News{% endblock title %}
+
+        {% block content %}
+
+        <!--Main Content-->
+
+        <div class="row main-content">
+            <!--Sidebar left-->
+            <div class="col-sm-3 col-xs-6 sidebar pl-0">
+                <div class="inner-sidebar mr-3">
+                    <!--Image Avatar-->
+                    <div class="avatar text-center">
+                        <img src="{{ usr.Image_profil.url }}" alt="" class="rounded-circle" />
+                        <p><strong>{{ usr.Nom_Complet }}</strong></p>
+                        <span class="text-primary small"><strong>{{ usr.Status }}</strong></span>
+                    </div>
+                    <!--Image Avatar-->
+
+                    <!--Sidebar Navigation Menu-->
+                    <div class="sidebar-menu-container">
+                        <ul class="sidebar-menu mt-4 mb-4">
+                            <li class="parent">
+                                <a href="/index_admin" class=""><i class="fa fa-dashboard mr-3"> </i>
+                                    <span class="none">Dashboard</span>
+                                </a>  
+                            </li>
+                            <li class="parent">
+                                <a href="/user_admin" class=""><i class="fas fa-user-circle mr-3"></i>
+                                    <span class="none">Utilisateur </span>
+                                </a>
+                            </li>
+                            <li class="parent">
+                                <a href="/news_post_admin" class=""><i class="fas fa-address-book mr-3"></i>
+                                    <span class="none">News ou Post</span>
+                                </a>
+                            </li>
+                            <li class="parent">
+                                <a href="/ressources_admin" class=""><i class="fas fa-database mr-3"></i>
+                                    <span class="none">Ressources</span>
+                                </a>
+                            </li>
+                            <li class="parent">
+                                <a href="/manage_stress_admin" class=""><i class="fas fa-smile mr-3"></i>
+                                    <span class="none">Manage Stress</span>
+                                </a>
+                            </li>
+                            <li class="parent">
+                                <a href="/logout" class=""><i class="fas fa-power-off mr-3"></i>
+                                    <span class="none">Déconnexion</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!--Sidebar Naigation Menu-->
+                </div>
+            </div>
+            <!--Sidebar left-->
+
+            <div class="col-sm-9 col-xs-12 content pt-3 pl-0">
+                <h5 class="mb-0" ><strong>News_Posts</strong></h5>
+                <span class="text-secondary">News_Posts<i class="fa fa-angle-right"></i> Modifier</span>
+                <div class="row mt-3">
+                    <div class="col-sm-12">
+                        <!--Default elements-->
+                        <div class="mt-1 mb-3 p-3 button-container bg-white border shadow-sm">
+                            <form class="form-horizontal mt-4 mb-5" action="/update_news_post_admin/{{ NP.id }}" enctype="multipart/form-data">
+                                {%  csrf_token %}
+                                <div class="form-group row">
+                                    <label for="Titre" class="control-label col-sm-2">Titre</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" name="Titre" class="form-control" value="{{ NP.Titre }}" required />
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="Contenu" class="control-label col-sm-2">Contenu</label>
+                                    <div class="col-sm-10">
+                                        <textarea name="Contenu" class="form-control" required >{{ NP.Contenu }}</textarea>
+                                    </div>
+                                </div>
+                                {% if NP.Fichier %}
+                                <div class="form-group row">
+                                    <label for="Fichier" class="control-label col-sm-2">Photo</label>
+                                    <div class="col-sm-10">
+                                        <input type="file" name="Fichier" class="form-control" src="{{ NP.Fichier.url }}" value="{{ NP.Fichier }}" />
+                                    </div>
+                                </div>
+                                {% else %}
+                                <div class="form-group row">
+                                    <label for="Fichier" class="control-label col-sm-2">Photo</label>
+                                    <div class="col-sm-10">
+                                        <input type="file" name="Fichier" class="form-control"/>
+                                    </div>
+                                </div>
+                                {% endif %}
+                                <div class="form-group row">
+                                    <label for="Type" class="control-label col-sm-2">Type</label>
+                                    <div class="col-sm-10">
+                                        <select name="Type" class="custom-select">
+                                            {% if NP.Type == "News" %}
+                                                print("<option value="News">News</option><option value="Posts">Posts</option>")
+                                            {% else %}
+                                                print("<option value="Posts">Posts</option><option value="News">News</option>")
+                                            {% endif %}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="offset-sm-2 col-sm-9">
+                                        <input type="submit" class="btn btn-success" value="Modifier">
+                                        <a class="btn btn-danger" href="/news_post_admin">Annuler</a>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+       <!--Main Content-->
+       {% endblock content %}
+       
+    {% block script %}
+    <!--Page Wrapper-->
+
+    <!-- Page JavaScript Files-->
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/jquery-1.12.4.min.js' %}"></script>
+    <!--Popper JS-->
+    <script src="{% static 'js/popper.min.js' %}"></script>
+    <!--Bootstrap-->
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <!--Sweet alert JS-->
+    <script src="{% static 'js/sweetalert.js' %}"></script>
+    <!--Progressbar JS-->
+    <script src="{% static 'js/progressbar.min.js' %}"></script>
+    <!--Charts-->
+    <!--Canvas JS-->
+    <script src="{% static 'js/charts/canvas.min.js' %}"></script>
+    <!--Bootstrap Calendar JS-->
+    <script src="{% static 'js/calendar/bootstrap_calendar.js' %}"></script>
+    <script src="{% static 'js/calendar/demo.js' %}"></script>
+    <!--Bootstrap Calendar-->
+    <!--Datatable-->
+    <script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'js/dataTables.bootstrap4.min.js' %}"></script>
+
+    <!--Custom Js Script-->
+    <script src="{% static 'js/custom.js' %}"></script>
+    <!--Custom Js Script-->
+    {% endblock script %}

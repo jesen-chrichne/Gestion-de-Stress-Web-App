@@ -1,0 +1,173 @@
+{% extends 'app.html' %}
+{% load static %}
+    {% block stylesheet %}
+    <!--Bootstrap CSS-->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <!--Custom style.css-->
+    <link rel="stylesheet" href="{% static 'css/quicksand.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <!--Font Awesome-->
+    <link rel="stylesheet" href="{% static 'css/fontawesome-all.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/fontawesome.css' %}">
+    <!--Animate CSS-->
+    <link rel="stylesheet" href="{% static 'css/animate.min.css' %}">
+    <!--Chartist CSS-->
+    <link rel="stylesheet" href="{% static 'css/chartist.min.css' %}">
+    <!--Map-->
+    <link rel="stylesheet" href="{% static 'css/jquery-jvectormap-2.0.2.css' %}">
+    <!--Bootstrap Calendar-->
+    <link rel="stylesheet" href="{% static 'js/calendar/bootstrap_calendar.css' %}">
+    <!--Nice select -->
+    <link rel="stylesheet" href="{% static 'css/nice-select.css' %}">
+    {% endblock stylesheet %}
+
+    {% block title %}Chat{% endblock title %}
+
+    {% block content %}
+
+    <div class="row main-content">
+        <!--Sidebar left-->
+        <div class="col-sm-3 col-xs-6 sidebar pl-0">
+            <div class="inner-sidebar mr-3">
+                <!--Image Avatar-->
+                <div class="avatar text-center">
+                    <img src="{{ usr.Image_profil.url }}" alt="" class="rounded-circle" />
+                    <p><strong>{{ usr.Nom_Complet }}</strong></p>
+                    <span class="text-primary small"><strong>{{ usr.Status }}</strong></span>
+                </div>
+                <!--Image Avatar-->
+
+                <!--Sidebar Navigation Menu-->
+                <div class="sidebar-menu-container">
+                    <ul class="sidebar-menu mt-4 mb-4">
+                        <li class="parent">
+                            <a href="/index_app" class=""><i class="fa fa-rocket mr-3"> </i>
+                                <span class="none">Accueil</span>
+                            </a>  
+                        </li>
+                        <li class="parent">
+                            <a href="/profil" class=""><i class="fas fa-user mr-3"> </i>
+                                <span class="none">Mon profil</span>
+                            </a>  
+                        </li>
+                        <li class="parent">
+                            <a href="/journal_app" class=""><i class="fas fa-book mr-3"> </i>
+                                <span class="none">Journal</span>
+                            </a>  
+                        </li>
+                        <li class="parent">
+                            <a href="/manage_stress_app" class=""><i class="fas fa-smile mr-3"></i>
+                                <span class="none">Gestion de stress</span>
+                            </a>
+                        </li>
+                        <li class="parent">
+                            <a href="/ressource_app" class=""><i class="fas fa-database mr-3"></i>
+                                <span class="none">Ressource</span>
+                            </a>
+                        </li>
+                        {% if usr.Status == 'Psychologue' %}
+                        <li class="parent">
+                            <a href="/assistance" class=""><i class="fas fa-envelope mr-3"></i>
+                                <span class="none">Messagerie</span>
+                            </a>
+                        </li>
+                        {% else %}
+                        <li class="parent">
+                            <a href="/chat" class=""><i class="fas fa-comments mr-3"></i>
+                                <span class="none">Chat</span>
+                            </a>
+                        </li>
+                        {% endif %}
+
+                        <li class="parent">
+                            <a href="/logout" class=""><i class="fas fa-power-off mr-3"></i>
+                                <span class="none">Déconnexion</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <!--Sidebar Naigation Menu-->
+            </div>
+        </div>
+
+        
+        <!--Dashboard Profile card-->
+        {% if Ast %}
+        {% for as in Ast %}
+        <div class="col-lg-4 col-md-4 col-sm-4 card-pro mb-3">
+            <div class="card shadow">
+                <div class="card-body">
+                    <div class="media">
+                        <img class="align-self-center mr-3 rounded-circle" src="{{as.User_send_msg.Image_profil.url }}" width="40px" height="40px" alt="Generic placeholder image">
+                        <div class="media-body">
+                            <h4 class="mt-0"><strong>{{ as.User_send_msg.Nom_Complet }}</strong></h4>
+                        </div>
+                    </div>
+                    <p class="mb-3 mt-3 text-center p-space">
+                        <strong>{{ as.Object_msg}}</strong>
+                    </p>
+                    <div class="dropdown-divider"></div>
+                    <p class="mb-3 mt-3 text-center p-space">
+                        {{ as.Content_msg}}
+                    </p>
+                    <a href="/chat_mp/{{ as.Object_msg }}" class="btn btn-outline-info btn-round">
+                        <span class="none"><i class="fa fa-comments mr-3"></i> Discuter</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <div class="col-sm-9 col-xs-12 content pt-3 pl-0">
+            <h5 class="mb-3" ><strong>Vous n'avez pas envoyer de message.</strong></h5>
+            <p>Pour envoyer un message au psy, voir la page Gestion de Stress</p>
+            <a href="/manage_stress_app">Cliquez ici</a>
+        </div>
+        {% endif %}
+        <!--Dashboard Profile card-->
+        
+    </div>
+
+    {% endblock content %}
+
+    {% block script %}
+    <!-- Page JavaScript Files-->
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/jquery-1.12.4.min.js' %}"></script>
+    <!--Popper JS-->
+    <script src="{% static 'js/popper.min.js' %}"></script>
+    <!--Bootstrap-->
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <!--Sweet alert JS-->
+    <script src="{% static 'js/sweetalert.js' %}"></script>
+    <!--Progressbar JS-->
+    <script src="{% static 'js/progressbar.min.js' %}"></script>
+    <!--Flot.JS-->
+    <script src="{% static 'js/charts/jquery.flot.min.js' %}"></script>
+    <script src="{% static 'js/charts/jquery.flot.pie.min.js' %}"></script>
+    <script src="{% static 'js/charts/jquery.flot.categories.min.js' %}"></script>
+    <script src="{% static 'js/charts/jquery.flot.stack.min.js' %}"></script>
+    <!--Chart JS-->
+    <script src="{% static 'js/charts/chart.min.js' %}"></script>
+    <!--Chartist JS-->
+    <script src="{% static 'js/charts/chartist.min.js' %}"></script>
+    <script src="{% static 'js/charts/chartist-data.js' %}"></script>
+    <script src="{% static 'js/charts/demo.js' %}"></script>
+    <!--Maps-->
+    <script src="{% static 'js/maps/jquery-jvectormap-2.0.2.min.js' %}"></script>
+    <script src="{% static 'js/maps/jquery-jvectormap-world-mill-en.js' %}"></script>
+    <script src="{% static 'js/maps/jvector-maps.js' %}"></script>
+    <!--Bootstrap Calendar JS-->
+    <script src="{% static 'js/calendar/bootstrap_calendar.js' %}"></script>
+    <script src="{% static 'js/calendar/demo.js' %}"></script>
+    <!--Nice select-->
+    <script src="{% static 'js/jquery.nice-select.min.js' %}"></script>
+
+    <!--Custom Js Script-->
+    <script src="{% static 'js/custom.js' %}"></script>
+    <!--Custom Js Script-->
+    <script>
+        //Nice select
+        $('.bulk-actions').niceSelect();
+    </script>
+    {% endblock script %}

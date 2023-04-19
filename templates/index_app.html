@@ -1,0 +1,224 @@
+{% extends 'app.html' %}
+{% load static %}
+    {% block stylesheet %}
+    <!--Bootstrap CSS-->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <!--Custom style.css-->
+    <link rel="stylesheet" href="{% static 'css/quicksand.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <!--Font Awesome-->
+    <link rel="stylesheet" href="{% static 'css/fontawesome-all.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/fontawesome.css' %}">
+    <!--Animate CSS-->
+    <link rel="stylesheet" href="{% static 'css/animate.min.css' %}">
+    <!--Chartist CSS-->
+    <link rel="stylesheet" href="{% static 'css/chartist.min.css' %}">
+    <!--Map-->
+    <link rel="stylesheet" href="{% static 'css/jquery-jvectormap-2.0.2.css' %}">
+    <!--Bootstrap Calendar-->
+    <link rel="stylesheet" href="{% static 'js/calendar/bootstrap_calendar.css' %}">
+    <!--Nice select -->
+    <link rel="stylesheet" href="{% static 'css/nice-select.css' %}">
+    <style>
+        #anyClass {
+            height:750px;
+            overflow-y: scroll;
+          } 
+    </style>
+    {% endblock stylesheet %}
+
+    {% block title %}Acceuil{% endblock title %}
+
+    {% block content %}
+
+    <div class="row main-content">
+        <!--Sidebar left-->
+        <div class="col-sm-3 col-xs-6 sidebar pl-0">
+            <div class="inner-sidebar mr-3">
+                <!--Image Avatar-->
+                <div class="avatar text-center">
+                    <img src="{{ usr.Image_profil.url }}" alt="" class="rounded-circle" />
+                    <p><strong>{{ usr.Nom_Complet }}</strong></p>
+                    <span class="text-primary small"><strong>{{ usr.Status }}</strong></span>
+                </div>
+                <!--Image Avatar-->
+
+                <!--Sidebar Navigation Menu-->
+                <div class="sidebar-menu-container">
+                    <ul class="sidebar-menu mt-4 mb-4">
+                        <li class="parent">
+                            <a href="" class=""><i class="fa fa-rocket mr-3"> </i>
+                                <span class="none">Acceuil</span>
+                            </a>  
+                        </li>
+                        <li class="parent">
+                            <a href="/profil" class=""><i class="fas fa-user mr-3"> </i>
+                                <span class="none">Mon profil</span>
+                            </a>  
+                        </li>
+                        <li class="parent">
+                            <a href="/journal_app" class=""><i class="fas fa-book mr-3"> </i>
+                                <span class="none">Journal</span>
+                            </a>  
+                        </li>
+                        <li class="parent">
+                            <a href="/manage_stress_app" class=""><i class="fas fa-smile mr-3"></i>
+                                <span class="none">Gestion de stress</span>
+                            </a>
+                        </li>
+                        <li class="parent">
+                            <a href="/ressource_app" class=""><i class="fas fa-database mr-3"></i>
+                                <span class="none">Ressource</span>
+                            </a>
+                        </li>
+                        {% if usr.Status == 'Psychologue' %}
+                        <li class="parent">
+                            <a href="/assistance" class=""><i class="fas fa-envelope mr-3"></i>
+                                <span class="none">Messagerie</span>
+                            </a>
+                        </li>
+                        {% else %}
+                        <li class="parent">
+                            <a href="/chat" class=""><i class="fas fa-comments mr-3"></i>
+                                <span class="none">Chat</span>
+                            </a>
+                        </li>
+                        {% endif %}
+                        
+                        <li class="parent">
+                            <a href="/logout" class=""><i class="fas fa-power-off mr-3"></i>
+                                <span class="none">Déconnexion</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <!--Sidebar Naigation Menu-->
+            </div>
+        </div>
+
+        <div class="col-sm-9 col-xs-12 content pt-3 pl-0" id="anyClass">
+            <div class="row mt-3">
+                <div class="col-sm-12">
+                    <div class="mt-1 mb-3 p-3 button-container border bg-white shadow-sm custom-tabs">
+                        <nav>
+                            <div class="nav nav-tabs nav-fill" id="nav-customContent" role="tablist">
+                                <a class="nav-item nav-link active" id="nav-journal" data-toggle="tab" href="#custom-journal" role="tab" aria-controls="nav-journal" aria-selected="true">Journal</a>
+                                <a class="nav-item nav-link" id="nav-ms" data-toggle="tab" href="#custom-ms" role="tab" aria-controls="nav-ms" aria-selected="false">Gérer votre stress</a>
+                                <a class="nav-item nav-link" id="nav-src" data-toggle="tab" href="#custom-src" role="tab" aria-controls="nav-src" aria-selected="false">Ressource</a>
+                            </div>
+                        </nav>
+                        <div class="tab-content py-3 px-3 px-sm-0" id="nav-customContent">
+                            <div class="tab-pane fade show active" id="custom-journal" role="tabpanel" aria-labelledby="nav-journal">
+                                <div class="mt-1 mb-5 button-container">
+                                    <div class="card-group">
+                                        {% for np in NP %}
+                                        <div class="card">
+                                            {% if np.Fichier %}
+                                                <div class="card_header"><img class="card-img-top" src="{{ np.Fichier.url }}" alt="Card image cap"></div>
+                                            {% else %}
+                                            {% endif %}
+                                            <div class="card-body">
+                                                <h5 class="card-title text-left">{{ np.Titre }}</h5>
+                                                <p class="card-text"><small class="text-muted">{{ np.Date_pub }}</small></p>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <a class="btn btn-info btn-round" href="/journal_app">
+                                    <i class="fas fa-info">   Plus de détails </i>
+                                </a>
+                            </div>
+                            <div class="tab-pane fade" id="custom-ms" role="tabpanel" aria-labelledby="nav-ms">
+                                <div class="mt-1 mb-5 button-container">
+                                    <div class="card-group">
+                                        {% for ms in MS %}
+                                        <div class="card">
+                                            {% if ms.Fichier_MS %}
+                                            <img class="card-img-top" src="{{ ms.Fichier_MS.url }}" alt="Card image cap">
+                                            {% else %}
+                                            {% endif %}
+                                            <div class="card-body">
+                                                <h5 class="card-title">{{ ms.Titre_MS }}</h5>
+                                                <p class="card-text"><small class="text-muted">{{ ms.Date_pub_MS }}</small></p>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <a class="btn btn-info btn-round" href="/manage_stress_app">
+                                    <i class="fas fa-info">   Plus de détails </i>
+                                </a>
+                            </div>
+                            <div class="tab-pane fade" id="custom-src" role="tabpanel" aria-labelledby="nav-src">
+                                <div class="mt-1 mb-5 button-container">
+                                    <div class="card-group">
+                                        {% for src in RS %}
+                                        <div class="card">
+                                            {% if src.Fichier_Ressource %}
+                                            <img class="card-img-top" src="{{ src.Fichier_Ressource.url }}" alt="Card image cap">
+                                            {% else %}
+                                            {% endif %}
+                                            <div class="card-body">
+                                                <h5 class="card-title">{{ src.Titre_Ressource }}</h5>
+                                                <p class="card-text"><small class="text-muted">{{ src.Date_pub_Ressource }}</small></p>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <a class="btn btn-info btn-round" href="/ressource_app">
+                                    <i class="fas fa-info">   Plus de détails </i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    {% endblock content %}
+
+    {% block script %}
+    <!-- Page JavaScript Files-->
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/jquery-1.12.4.min.js' %}"></script>
+    <!--Popper JS-->
+    <script src="{% static 'js/popper.min.js' %}"></script>
+    <!--Bootstrap-->
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <!--Sweet alert JS-->
+    <script src="{% static 'js/sweetalert.js' %}"></script>
+    <!--Progressbar JS-->
+    <script src="{% static 'js/progressbar.min.js' %}"></script>
+    <!--Flot.JS-->
+    <script src="{% static 'js/charts/jquery.flot.min.js' %}"></script>
+    <script src="{% static 'js/charts/jquery.flot.pie.min.js' %}"></script>
+    <script src="{% static 'js/charts/jquery.flot.categories.min.js' %}"></script>
+    <script src="{% static 'js/charts/jquery.flot.stack.min.js' %}"></script>
+    <!--Chart JS-->
+    <script src="{% static 'js/charts/chart.min.js' %}"></script>
+    <!--Chartist JS-->
+    <script src="{% static 'js/charts/chartist.min.js' %}"></script>
+    <script src="{% static 'js/charts/chartist-data.js' %}"></script>
+    <script src="{% static 'js/charts/demo.js' %}"></script>
+    <!--Maps-->
+    <script src="{% static 'js/maps/jquery-jvectormap-2.0.2.min.js' %}"></script>
+    <script src="{% static 'js/maps/jquery-jvectormap-world-mill-en.js' %}"></script>
+    <script src="{% static 'js/maps/jvector-maps.js' %}"></script>
+    <!--Bootstrap Calendar JS-->
+    <script src="{% static 'js/calendar/bootstrap_calendar.js' %}"></script>
+    <script src="{% static 'js/calendar/demo.js' %}"></script>
+    <!--Nice select-->
+    <script src="{% static 'js/jquery.nice-select.min.js' %}"></script>
+
+    <!--Custom Js Script-->
+    <script src="{% static 'js/custom.js' %}"></script>
+    <!--Custom Js Script-->
+    <script>
+        //Nice select
+        $('.bulk-actions').niceSelect();
+    </script>
+    {% endblock script %}

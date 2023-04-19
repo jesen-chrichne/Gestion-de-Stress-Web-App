@@ -1,0 +1,222 @@
+{% extends 'base.html' %}
+{% load static %}
+
+    {% block stylesheet %}
+        <!--Bootstrap CSS-->
+        <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+        <!--Custom style.css-->
+        <link rel="stylesheet" href="{% static 'css/quicksand.css' %}">
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+        <!--Font Awesome-->
+        <link rel="stylesheet" href="{% static 'css/fontawesome-all.min.css' %}">
+        <link rel="stylesheet" href="{% static 'css/fontawesome.css' %}">
+        <!--Chartist CSS-->
+        <link rel="stylesheet" href="{% static 'css/chartist.min.css' %}">
+        <!--Bootstrap Calendar-->
+        <link rel="stylesheet" href="{% static 'js/calendar/bootstrap_calendar.css' %}">
+        <!--Datatable-->
+        <link rel="stylesheet" href="{% static 'css/dataTables.bootstrap4.min.css' %}">
+
+    {% endblock stylesheet %}
+
+    {% block title %}Utilisateurs{% endblock title %}
+
+        {% block content %}
+            <!--Main Content-->
+
+            <div class="row main-content">
+                <!--Sidebar left-->
+                <div class="col-sm-3 col-xs-6 sidebar pl-0">
+                    <div class="inner-sidebar mr-3">
+                        <!--Image Avatar-->
+                        <div class="avatar text-center">
+                            <img src="{{ usr.Image_profil.url }}" alt="" class="rounded-circle" />
+                            <p><strong>{{ usr.Nom_Complet }}</strong></p>
+                            <span class="text-primary small"><strong>{{ usr.Status }}</strong></span>
+                        </div>
+                        <!--Image Avatar-->
+
+                        <!--Sidebar Navigation Menu-->
+                        <div class="sidebar-menu-container">
+                            <ul class="sidebar-menu mt-4 mb-4">
+                                <li class="parent">
+                                    <a href="/index_admin" class=""><i class="fa fa-dashboard mr-3"> </i>
+                                        <span class="none">Dashboard</span>
+                                    </a>  
+                                </li>
+                                <li class="parent">
+                                    <a href="/user_admin" class=""><i class="fas fa-user-circle mr-3"></i>
+                                        <span class="none">Utilisateur </span>
+                                    </a>
+                                </li>
+                                <li class="parent">
+                                    <a href="/news_post_admin" class=""><i class="fas fa-address-book mr-3"></i>
+                                        <span class="none">News ou Post</span>
+                                    </a>
+                                </li>
+                                <li class="parent">
+                                    <a href="/ressources_admin" class=""><i class="fas fa-database mr-3"></i>
+                                        <span class="none">Ressources</span>
+                                    </a>
+                                </li>
+                                <li class="parent">
+                                    <a href="/manage_stress_admin" class=""><i class="fas fa-smile mr-3"></i>
+                                        <span class="none">Manage Stress</span>
+                                    </a>
+                                </li>
+                                <li class="parent">
+                                    <a href="#" class=""><i class="fas fa-power-off mr-3"></i>
+                                        <span class="none">Déconnexion</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!--Sidebar Naigation Menu-->
+                    </div>
+                </div>
+                <!--Sidebar left-->
+
+                <!--Content right-->
+                <div class="col-sm-9 col-xs-12 content pt-3 pl-0">
+                    <h5 class="mb-0" ><strong>Utilisateurs</strong></h5>
+                    <span class="text-secondary">Utilisateur<i class="fa fa-angle-right"></i> Modifier</span>
+                    
+                    <div class="row mt-3">
+                        <div class="col-sm-12">
+                            <!--Default elements-->
+                            <div class="mt-1 mb-3 p-3 button-container bg-white border shadow-sm">
+                                <form class="form-horizontal mt-4 mb-5" method="post" action="/update_user_admin/{{ Users_e.id }}" enctype="multipart/form-data">
+                                    {%  csrf_token %}
+
+                                    <div class="form-group row">
+                                        <label for="Image_Profil" class="control-label col-sm-2">Photo de Profil</label>
+                                        <div class="col-sm-8">
+                                            <p class="file_upload">Currently :
+                                                <a href="{{ Users_e.Image_profil.url }}">{{ Users_e.Image_profil }}</a><br>
+                                                " Change "
+                                            </p>
+                                            <input type="file" name="Image_Profil" accept="image/*" onchange="loadFile(event)" required >
+                                        </div>
+                                        <img id="output" src="{% static 'img/default-avatar.jpg' %}" class="rounded-circle" width="100" height="100" />
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="Nom" class="control-label col-sm-2">Nom Complet</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" name="Nom" class="form-control" value="{{ Users_e.Nom_Complet }}" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="Age" class="control-label col-sm-2">Age</label>
+                                        <div class="col-sm-10">
+                                            <input type="number" name="Age" class="form-control" value="{{ Users_e.Age }}" min="15" max="85" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="Email" class="control-label col-sm-2">Email</label>
+                                        <div class="col-sm-8">
+                                            <input type="email" name="Email" class="form-control" value="{{ Users_e.Email }}" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="Departement" class="control-label col-sm-2">Département</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" name="Departement" class="form-control" value="{{ Users_e.Departement }}" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="Fonction" class="control-label col-sm-2">Fonction</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" name="Fonction" class="form-control" value="{{ Users_e.Fonction }}" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="Username" class="control-label col-sm-2">Nom d'utilisateur</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" name="Username" class="form-control" value="{{ Users_e.Username }}" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="Password" class="control-label col-sm-2">Mot de passe</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" name="Password" class="form-control" value="{{ Users_e.Password }}"/>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="Status" class="control-label col-sm-2">Status</label>
+                                        <div class="col-sm-10">
+                                            <select name="Status" class="custom-select">
+                                                {% if Users_e.Status == "Utilisateur Simple" %}
+                                                    print("<option value="Utilisateur Simple">Utilisateur Simple</option><option value="Psychologue">Psychologue</option><option value="Administrateur">Administrateur</option>")
+                                                {% elif Users_e.Status == "Psychologue" %}
+                                                    print("<option value="Psychologue">Psychologue</option><option value="Utilisateur Simple">Utilisateur Simple</option><option value="Administrateur">Administrateur</option>")
+                                                {% else %}
+                                                    print("<option value="Administrateur">Administrateur</option><option value="Utilisateur Simple">Utilisateur Simple</option><option value="Psychologue">Psychologue</option>")
+                                                {% endif %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group row">
+                                        <div class="offset-sm-2 col-sm-9">
+                                            <input type="submit" class="btn btn-success" value="Modifier">
+                                            <a class="btn btn-danger" href="/user_admin">Annuler</a>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+           <!--Main Content-->
+        {% endblock content %}
+
+
+    {% block script %}
+    <!--Page Wrapper-->
+    <script>
+        var loadFile = function(event) {
+            var output = document.getElementById('output');
+            output.src = URL.createObjectURL(event.target.files[0]);
+            output.onload = function() {
+              URL.revokeObjectURL(output.src) // free memory
+            }
+          };
+    </script>
+    <!-- Page JavaScript Files-->
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/jquery-1.12.4.min.js' %}"></script>
+    <!--Popper JS-->
+    <script src="{% static 'js/popper.min.js' %}"></script>
+    <!--Bootstrap-->
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <!--Sweet alert JS-->
+    <script src="{% static 'js/sweetalert.js' %}"></script>
+    <!--Progressbar JS-->
+    <script src="{% static 'js/progressbar.min.js' %}"></script>
+    <!--Charts-->
+    <!--Canvas JS-->
+    <script src="{% static 'js/charts/canvas.min.js' %}"></script>
+    <!--Bootstrap Calendar JS-->
+    <script src="{% static 'js/calendar/bootstrap_calendar.js' %}"></script>
+    <script src="{% static 'js/calendar/demo.js' %}"></script>
+    <!--Bootstrap Calendar-->
+    <!--Datatable-->
+    <script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'js/dataTables.bootstrap4.min.js' %}"></script>
+
+    <!--Custom Js Script-->
+    <script src="{% static 'js/custom.js' %}"></script>
+    <!--Custom Js Script-->
+    <script>
+        $('#example').DataTable();
+    </script>
+{% endblock script %}

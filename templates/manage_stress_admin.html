@@ -1,0 +1,161 @@
+{% extends 'base.html' %}
+{% load static %}
+    {% block stylesheet %}
+    <!--Bootstrap CSS-->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <!--Custom style.css-->
+    <link rel="stylesheet" href="{% static 'css/quicksand.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <!--Font Awesome-->
+    <link rel="stylesheet" href="{% static 'css/fontawesome-all.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/fontawesome.css' %}">
+    <!--Chartist CSS-->
+    <link rel="stylesheet" href="{% static 'css/chartist.min.css' %}">
+    <!--Bootstrap Calendar-->
+    <link rel="stylesheet" href="{% static 'js/calendar/bootstrap_calendar.css' %}">
+    <!--Datatable-->
+    <link rel="stylesheet" href="{% static 'css/dataTables.bootstrap4.min.css' %}">
+    {% endblock stylesheet %}
+
+    {% block title %}Manage Stress{% endblock title %}
+
+    {% block content %}
+        <div class="row main-content">
+            <!--Sidebar left-->
+            <div class="col-sm-3 col-xs-6 sidebar pl-0">
+                <div class="inner-sidebar mr-3">
+                    <!--Image Avatar-->
+                    <div class="avatar text-center">
+                        <img src="{{ usr.Image_profil.url }}" alt="" class="rounded-circle" />
+                        <p><strong>{{ usr.Nom_Complet }}</strong></p>
+                        <span class="text-primary small"><strong>{{ usr.Status }}</strong></span>
+                    </div>
+                    <!--Image Avatar-->
+
+                    <!--Sidebar Navigation Menu-->
+                    <div class="sidebar-menu-container">
+                        <ul class="sidebar-menu mt-4 mb-4">
+                            <li class="parent">
+                                <a href="/index_admin" class=""><i class="fa fa-dashboard mr-3"> </i>
+                                    <span class="none">Dashboard</span>
+                                </a>  
+                            </li>
+                            <li class="parent">
+                                <a href="/user_admin" class=""><i class="fas fa-user-circle mr-3"></i>
+                                    <span class="none">Utilisateur </span>
+                                </a>
+                            </li>
+                            <li class="parent">
+                                <a href="/news_post_admin" class=""><i class="fas fa-address-book mr-3"></i>
+                                    <span class="none">News ou Post</span>
+                                </a>
+                            </li>
+                            <li class="parent">
+                                <a href="/ressources_admin" class=""><i class="fas fa-database mr-3"></i>
+                                    <span class="none">Ressources</span>
+                                </a>
+                            </li>
+                            <li class="parent">
+                                <a href="/manage_stress_admin" class=""><i class="fas fa-smile mr-3"></i>
+                                    <span class="none">Manage Stress</span>
+                                </a>
+                            </li>
+                            <li class="parent">
+                                <a href="/logout" class=""><i class="fas fa-power-off mr-3"></i>
+                                    <span class="none">Déconnexion</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!--Sidebar Naigation Menu-->
+                </div>
+            </div>
+            <!--Sidebar left-->
+
+            <!--Content right-->
+            <div class="col-sm-9 col-xs-12 content pt-3 pl-0">
+                <h5 class="mb-0" ><strong>Manage Stress</strong></h5>
+                <span class="text-secondary">Infos sur la gestion de stress</span>
+                <div class="row mt-3">
+                    <div class="col-sm-12">
+                        <!--Datatable-->
+                        <div class="mt-1 mb-3 p-3 button-container bg-white border shadow-sm">
+                            <a class="btn btn-success" href="/add_manage_stress_admin">
+                                <i class="fas fa-plus mr-3"></i>Ajouter
+                            </a>
+                            
+
+                            <div class="table-responsive">
+                                <table id="example" class="table table-striped table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Titre</th>
+                                            <th>Description</th>
+                                            <th>Fichiers</th>
+                                            <th>Poster le </th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        {% for ms in MS %}
+                                        <tr>
+                                            <td>{{ ms.Titre_MS }}</td>
+                                            <td>{{ ms.Description_MS}}</td>
+                                            <td>{{ ms.Fichier_MS }}</td>
+                                            <td>{{ ms.Date_pub_MS}}</td>
+                                            <td>
+                                                <a class="btn btn-info icon-round" href="/edit_manage_stress_admin/{{ ms.id }}">
+                                                    <i class="fa fa-edit"></i>
+                                                </a>
+                                                <a class="btn btn-danger icon-round" href="/delete_manage_stress_admin/{{ ms.id }}">
+                                                    <i class="fa fa-trash"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--Dashboard widget-->
+            </div>
+        </div>
+
+    {% endblock content %}
+
+    {% block script %}
+    <!--Page Wrapper-->
+
+   <!-- Page JavaScript Files-->
+   <script src="{% static 'js/jquery.min.js' %}"></script>
+   <script src="{% static 'js/jquery-1.12.4.min.js' %}"></script>
+   <!--Popper JS-->
+   <script src="{% static 'js/popper.min.js' %}"></script>
+   <!--Bootstrap-->
+   <script src="{% static 'js/bootstrap.min.js' %}"></script>
+   <!--Sweet alert JS-->
+   <script src="{% static 'js/sweetalert.js' %}"></script>
+   <!--Progressbar JS-->
+   <script src="{% static 'js/progressbar.min.js' %}"></script>
+   <!--Charts-->
+   <!--Canvas JS-->
+   <script src="{% static 'js/charts/canvas.min.js' %}"></script>
+   <!--Bootstrap Calendar JS-->
+   <script src="{% static 'js/calendar/bootstrap_calendar.js' %}"></script>
+   <script src="{% static 'js/calendar/demo.js' %}"></script>
+   <!--Bootstrap Calendar-->
+   <!--Datatable-->
+   <script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
+   <script src="{% static 'js/dataTables.bootstrap4.min.js' %}"></script>
+
+   <!--Custom Js Script-->
+   <script src="{% static 'js/custom.js' %}"></script>
+   <!--Custom Js Script-->
+
+    <script>
+        $('#example').DataTable();
+    </script>
+    {% endblock script %}
